@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
 const Footer = () => {
@@ -6,11 +7,11 @@ const Footer = () => {
         <div>
             <footer className="text-gray-600 body-font">
                 <div className="container px-5 py-24 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
-                    <div className="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
+                    <div className="w-64 flex-shrink-0 md:mx-3 mx-auto text-center md:text-left">
                         <a className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
-                           <Image src="/logo.webp" alt="src" width={256} height={48}/>
+                            <Link href={'/'}><a><Image src='/logobg.png' width={205} height={40} alt="" /></a></Link>
                         </a>
-                        <p className="mt-2 text-sm text-gray-500 px-4">Air plant banjo lyft occupy retro adaptogen indego</p>
+                        <p className="mt-2 text-sm text-gray-500 px-2">Air plant banjo lyft occupy retro adaptogen indego</p>
                     </div>
                     <div className="flex-grow flex flex-wrap md:pl-20 -mb-10 md:mt-0 mt-10 md:text-left text-center">
                         <div className="lg:w-1/4 md:w-1/2 w-full px-4">
