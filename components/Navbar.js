@@ -26,14 +26,14 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
             </div>
             <div className='nav'>
                 <ul className='flex items-center space-x-6 font-bold md:text-md'>
-                    <Link href={'/tshirts'}><a><li>Tshirts</li></a></Link>  
+                    <Link href={'/tshirts'}><a><li>Tshirts</li></a></Link>
                     <Link href={'/hoodies'}><a><li>Hoodies</li></a></Link>
                     <Link href={'/stickers'}><a><li>Stickers</li></a></Link>
                     <Link href={'/mugs'}><a><li>Mugs</li></a></Link>
                 </ul>
             </div>
             <div className='cart absolute right-0 top-5 mx-5 cursor-pointer flex'>
-                <Link href={'/login'}><MdAccountCircle className='text-xl md:text-2xl mx-3' /></Link>
+                <Link href={'/login'}><a><MdAccountCircle className='text-xl md:text-2xl mx-3' /></a></Link>
                 <BsCart3 onClick={toggleCart} className='text-xl md:text-2xl' />
             </div>
 
