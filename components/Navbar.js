@@ -26,10 +26,10 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
             </div>
             <div className='nav'>
                 <ul className='flex items-center space-x-6 font-bold md:text-md'>
-                    <Link href={'/tshirts'}><a><li>Tshirts</li></a></Link>
-                    <Link href={'/hoodies'}><a><li>Hoodies</li></a></Link>
-                    <Link href={'/stickers'}><a><li>Stickers</li></a></Link>
-                    <Link href={'/mugs'}><a><li>Mugs</li></a></Link>
+                    <Link href={'/tshirts'}><a className='hover:text-pink-600'><li>Tshirts</li></a></Link>
+                    <Link href={'/hoodies'}><a className='hover:text-pink-600'><li>Hoodies</li></a></Link>
+                    <Link href={'/stickers'}><a className='hover:text-pink-600'><li>Stickers</li></a></Link>
+                    <Link href={'/mugs'}><a className='hover:text-pink-600'><li>Mugs</li></a></Link>
                 </ul>
             </div>
             <div className='cart absolute right-0 top-5 mx-5 cursor-pointer flex'>
@@ -37,7 +37,7 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
                 <BsCart3 onClick={toggleCart} className='text-xl md:text-2xl' />
             </div>
 
-            <div ref={ref} className={`sideCart w-65 h-[100vh] z-50 absolute top-0 right-0 bg-pink-50 px-8 py-8 transform transition-transform ${Object.keys(cart).length !== 0 ? 'translate-x-0' : 'translate-x-full'}`}>
+            <div ref={ref} className={`sideCart overflow-y-scroll w-65 h-[100vh] z-50 absolute top-0 right-0 bg-pink-50 px-8 py-8 transform transition-transform ${Object.keys(cart).length !== 0 ? 'translate-x-0' : 'translate-x-full'}`}>
                 <h2 className='font-bold text-xl my-2 text-center'>Shopping Cart</h2>
                 <span onClick={toggleCart} className="absolute right-2 top-3 text-2xl cursor-pointer text-pink-500">
                     <AiFillCloseCircle />
@@ -51,7 +51,7 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
                     {Object.keys(cart).map((k) => {
                         return <li key={k}>
                             <div className="item flex my-4 ">
-                                <div className='w-2/3 font-semibold'>{cart[k].name}</div>
+                                <div className='w-2/3 font-semibold'>{cart[k].name} ({cart[k].size}/{cart[k].variant})</div>
                                 <div className='flex items-center justify-center font-semibold w-1/3 text-center'>
                                     <AiFillMinusCircle onClick={() => { removeFromCart(k, 1, cart[k].price, cart[k].name, cart[k].size, cart[k].variant) }} className='cursor-pointer text-pink-500' /> <span className='mx-2'>{cart[k].qty}</span> <AiFillPlusCircle onClick={() => addToCart(k, 1, cart[k].price, cart[k].name, cart[k].size, cart[k].variant)} className='cursor-pointer text-pink-500' /> </div>
                             </div>

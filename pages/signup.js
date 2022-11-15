@@ -1,9 +1,69 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Signup = () => {
+
+  const [name, setName] = useState()
+  const [email, setEmail] = useState()
+  const [password, setPassword] = useState()
+
+  const handleChange = (e) => {
+    if (e.target.name == 'name') {
+      setName(e.target.value)
+    }
+    else if (e.target.name == 'email') {
+      setEmail(e.target.value)
+    }
+    else if (e.target.name == 'password') {
+      setPassword(e.target.value)
+    }
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const data = { name, email, password };
+
+    let res = await fetch('http://localhost:3000/api/signup', {
+      method: 'POST', // or 'PUT'
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    let response = await res.json()
+    console.log(response);
+    setName('')
+    setEmail('')
+    setPassword('')
+    toast.success('Your Account Has been Created!', {
+      position: "top-left",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+
+  }
+
   return (
     <div class="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <ToastContainer
+        position="top-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div class="w-full max-w-md space-y-8">
         <div>
           <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=pink&shade=600" alt="Your Company" />
@@ -13,24 +73,20 @@ const Signup = () => {
             <Link href={'/login'}><a href="#" class="font-medium text-pink-600 hover:text-pink-500"> Login</a></Link>
           </p>
         </div>
-        <form class="mt-8 space-y-6" action="#" method="POST">
+        <form onSubmit={handleSubmit} class="mt-8 space-y-6" action="#" method="POST">
           <input type="hidden" name="remember" value="true" />
           <div class="-space-y-px rounded-md shadow-sm">
             <div>
               <label for="name" class="sr-only">Name</label>
-              <input id="name" name="name" type="text" autocomplete="Name" required class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 my-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-pink-500 focus:outline-none focus:ring-pink-500 sm:text-sm" placeholder="Your Name" />
+              <input onChange={handleChange} value={name} id="name" name="name" type="text" autocomplete="Name" required class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 my-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-pink-500 focus:outline-none focus:ring-pink-500 sm:text-sm" placeholder="Your Name" />
             </div>
             <div>
-              <label for="email-address" class="sr-only my-2">Email address</label>
-              <input id="email-address" name="email" type="email" autocomplete="email" required class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 my-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-pink-500 focus:outline-none focus:ring-pink-500 sm:text-sm" placeholder="Email address" />
+              <label for="email" class="sr-only my-2">Email address</label>
+              <input onChange={handleChange} value={email} id="email" name="email" type="email" autocomplete="email" required class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 my-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-pink-500 focus:outline-none focus:ring-pink-500 sm:text-sm" placeholder="Email address" />
             </div>
             <div>
               <label for="password" class="sr-only">Password</label>
-              <input id="password" name="password" type="password" autocomplete="current-password" required class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 my-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-pink-500 focus:outline-none focus:ring-pink-500 sm:text-sm" placeholder="Password" />
-            </div>
-            <div>
-              <label for="cpassword" class="sr-only">Confirm Password</label>
-              <input id="cpassword" name="cpassword" type="password" required class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-pink-500 focus:outline-none focus:ring-pink-500 sm:text-sm" placeholder="Confirm Password" />
+              <input onChange={handleChange} value={password} id="password" name="password" type="password" autocomplete="current-password" required class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 my-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-pink-500 focus:outline-none focus:ring-pink-500 sm:text-sm" placeholder="Password" />
             </div>
           </div>
 

@@ -2,12 +2,14 @@ import '../styles/globals.css'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
+
 
 function MyApp({ Component, pageProps }) {
 
   const [cart, setCart] = useState({})
-  const [subTotal, setSubTotal] = useState(0)
-
+  const [subTotal, setSubTotal] = useState(0);
+  const router = useRouter();
   useEffect(() => {
     console.log("Hey I am useEffect from _app,js");
     try {
@@ -53,6 +55,16 @@ function MyApp({ Component, pageProps }) {
     saveCart({});
   }
 
+  //Buy Now
+  const buyNow = (itemCode, qty, price, name, size, variant) => {
+    let newCart = { itemCode: { qty: 1, price, name, size, variant } };
+
+    setCart(newCart);
+    saveCart(newCart);
+    router.push('/checkout');
+  }
+
+
   //Reducing The Quantity or completely removing the item
   const removeFromCart = (itemCode, qty, price, name, size, variant) => {
     let newCart = cart;
@@ -69,7 +81,7 @@ function MyApp({ Component, pageProps }) {
 
   return <>
     <Navbar key={subTotal} cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} clearCart={clearCart} saveCart={saveCart} subTotal={subTotal} />
-    <Component cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} clearCart={clearCart} saveCart={saveCart} subTotal={subTotal} {...pageProps} />
+    <Component buyNow={buyNow} cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} clearCart={clearCart} saveCart={saveCart} subTotal={subTotal} {...pageProps} />
     <Footer />
   </>
 }
