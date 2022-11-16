@@ -11,7 +11,7 @@ function MyApp({ Component, pageProps }) {
   const [subTotal, setSubTotal] = useState(0);
   const router = useRouter();
   useEffect(() => {
-    console.log("Hey I am useEffect from _app,js");
+    // console.log("Hey I am useEffect from _app,js");
     try {
       if (localStorage.getItem("cart")) {
         setCart(JSON.parse(localStorage.getItem("cart")))

@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 
-const Order = () => {
+function Order() {
   return (
     <section className="text-gray-600 body-font overflow-hidden">
       <div className="container px-5 py-20 mx-auto">
@@ -41,7 +41,7 @@ const Order = () => {
       </div>
     </section>
 
-  )
+  );
 }
 
-export default Order
+export default Order;
