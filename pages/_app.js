@@ -3,15 +3,25 @@ import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-
+import LoadingBar from 'react-top-loading-bar'
 
 function MyApp({ Component, pageProps }) {
 
   const [cart, setCart] = useState({})
   const [subTotal, setSubTotal] = useState(0);
+  const [user, setUser] = useState({value:null})
+  const [key, setKey] = useState(0)
+  const [progress, setProgress] = useState()
+
   const router = useRouter();
   useEffect(() => {
     // console.log("Hey I am useEffect from _app,js");
+    router.events.on('routeChangeStart', ()=>{
+      setProgress(40)
+    })
+    router.events.on('routeChangeComplete', ()=>{
+      setProgress(100)
+    })
     try {
       if (localStorage.getItem("cart")) {
         setCart(JSON.parse(localStorage.getItem("cart")))
@@ -21,7 +31,22 @@ function MyApp({ Component, pageProps }) {
       console.error(error)
       localStorage.clear();
     }
-  }, [])
+    const token = localStorage.getItem('token')
+    if(token)
+    {
+      setUser({value:token})
+      setKey(Math.random())
+    }
+  }, [router.query])
+
+  // Use to Logout the User
+  const logout=()=>
+  {
+    localStorage.removeItem('token');
+    setUser({value:null})
+    setKey(Math.random());
+  }
+
 
 
   //Use to Save Cart items even after reloading the page and calculate Subtotal price
@@ -80,7 +105,15 @@ function MyApp({ Component, pageProps }) {
   }
 
   return <>
-    <Navbar key={subTotal} cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} clearCart={clearCart} saveCart={saveCart} subTotal={subTotal} />
+    <div> 
+      <LoadingBar
+        color='#ff2d55'
+        progress={progress}
+        waitingTime={400}
+        onLoaderFinished={() => setProgress(0)}
+      /> 
+      </div>
+    <Navbar logout={logout} user={user} key={key} cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} clearCart={clearCart} saveCart={saveCart} subTotal={subTotal} />
     <Component buyNow={buyNow} cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} clearCart={clearCart} saveCart={saveCart} subTotal={subTotal} {...pageProps} />
     <Footer />
   </>

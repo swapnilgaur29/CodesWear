@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 
 function Login() {
+  const router=useRouter();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+
+  useEffect(() => {
+    if(localStorage.getItem('token'))
+    {
+      router.push('/')
+    }
+  }, [])
+  
 
   const handleChange = (e) => {
     if (e.target.name == 'email') {
@@ -44,7 +53,7 @@ function Login() {
         theme: 'light',
       });
       setTimeout(() => {
-        Router.push('http://localhost:3000');
+        router.push('http://localhost:3000');
       }, 1000);
     } else {
       toast.error(error, {
@@ -84,7 +93,6 @@ function Login() {
           </div>
         </div>
         <form onSubmit={handleSubmit} className="mt-8 space-y-6" method="POST">
-          <input type="hidden" name="remember" value="true" />
           <div className="-space-y-px rounded-md shadow-sm">
             <div>
               <label htmlFor="email" className="sr-only">Email address</label>
@@ -97,12 +105,7 @@ function Login() {
           </div>
 
           <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input id="remember-me" name="remember-me" type="checkbox" className="h-4 w-4 rounded border-gray-300 text-pink-600 focus:ring-pink-500" />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">Remember me</label>
-            </div>
-
-            <div className="text-sm">
+             <div className="text-sm">
               <Link href="/forgot"><a href="#" className="font-medium text-pink-600 hover:text-pink-500">Forgot your password?</a></Link>
             </div>
           </div>

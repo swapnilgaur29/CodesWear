@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
 import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from 'next/router';
 
 function Signup() {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const router = useRouter();
+
+  useEffect(() => {
+    if(localStorage.getItem('token'))
+    {
+      router.push('/')
+    }
+  }, [])
 
   const handleChange = (e) => {
     if (e.target.name == 'name') {
@@ -47,7 +56,7 @@ function Signup() {
   };
 
   return (
-    <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="flex min-h-full items-center justify-center py-12 px-6 sm:px-6 lg:px-8">
       <ToastContainer
         position="top-left"
         autoClose={5000}
@@ -70,7 +79,6 @@ function Signup() {
           </p>
         </div>
         <form onSubmit={handleSubmit} className="mt-8 space-y-6" method="POST">
-          <input type="hidden" name="remember" value="true" />
           <div className="-space-y-px rounded-md shadow-sm">
             <div>
               <label htmlFor="name" className="sr-only">Name</label>
