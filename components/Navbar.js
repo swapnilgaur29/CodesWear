@@ -67,22 +67,49 @@ const Navbar = ({
         </ul>
       </div>
       <div className="cart absolute items-center right-0 top-5 mx-5 cursor-pointer flex">
-        <a onMouseOver={()=>{setDropdown(true)}} onMouseLeave={()=>{setDropdown(false)}}>
-        {dropdown && (
-          <div onMouseOver={()=>{setDropdown(true)}} onMouseLeave={()=>{setDropdown(false)}} className="absolute right-8 top-6 bg-white border shadow-lg px-4 py-2 rounded-md w-36">
-            <ul>
-              <Link href={'/myaccount'}><a><li className='py-1 hover:text-pink-500 text-sm font-semibold'>My Account</li></a></Link>
-              <Link href={'/orders'}><a><li className='py-1 hover:text-pink-500 text-sm font-semibold'>Orders</li></a></Link>
-              <li onClick={logout} className='py-1 hover:text-pink-500 text-sm font-semibold'>Logout</li>
-            </ul>
-          </div>
-        )}
-        {user.value && (
-          <MdAccountCircle
-          className="text-xl md:text-2xl mx-3"  
-          />
+        <span
+          onMouseOver={() => {
+            setDropdown(true);
+          }}
+          onMouseLeave={() => {
+            setDropdown(false);
+          }}>
+          {dropdown && (
+            <div
+              onMouseOver={() => {
+                setDropdown(true);
+              }}
+              onMouseLeave={() => {
+                setDropdown(false);
+              }}
+              className="absolute right-8 top-6 bg-white border shadow-lg px-4 py-2 rounded-md w-36">
+              <ul>
+                <Link href={"/myaccount"}>
+                  <a>
+                    <li className="py-1 hover:text-pink-500 text-sm font-semibold">
+                      My Account
+                    </li>
+                  </a>
+                </Link>
+                <Link href={"/orders"}>
+                  <a>
+                    <li className="py-1 hover:text-pink-500 text-sm font-semibold">
+                      Orders
+                    </li>
+                  </a>
+                </Link>
+                <li
+                  onClick={logout}
+                  className="py-1 hover:text-pink-500 text-sm font-semibold">
+                  Logout
+                </li>
+              </ul>
+            </div>
           )}
-        </a>
+          {user.value && (
+            <MdAccountCircle className="text-xl md:text-2xl mx-3" />
+          )}
+        </span>
         {!user.value && (
           <Link href="/login">
             <a>
@@ -99,13 +126,11 @@ const Navbar = ({
         ref={ref}
         className={`sideCart overflow-y-scroll w-65 h-[100vh] z-50 absolute top-0 right-0 bg-pink-50 px-8 py-8 transform transition-transform ${
           Object.keys(cart).length !== 0 ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
+        }`}>
         <h2 className="font-bold text-xl my-2 text-center">Shopping Cart</h2>
         <span
           onClick={toggleCart}
-          className="absolute right-2 top-3 text-2xl cursor-pointer text-pink-500"
-        >
+          className="absolute right-2 top-3 text-2xl cursor-pointer text-pink-500">
           <AiFillCloseCircle />
         </span>
         <ol className="list-decimal font-semibold">
@@ -161,8 +186,7 @@ const Navbar = ({
           </Link>
           <button
             onClick={clearCart}
-            className="flex mx-2 font-semibold mt-5 text-white bg-pink-500 border-0 py-2 px-2 focus:outline-none hover:bg-pink-600 rounded text-lg"
-          >
+            className="flex mx-2 font-semibold mt-5 text-white bg-pink-500 border-0 py-2 px-2 focus:outline-none hover:bg-pink-600 rounded text-lg">
             <AiFillDelete className="m-1" />
             Clear Cart
           </button>
