@@ -3,7 +3,7 @@ import Link from "next/link";
 import mongoose from "mongoose";
 import Product from "../models/Product";
 
-const MONGO_URI = "mongodb://localhost:27017/codeswear";
+const MONGO_URI = "mongodb://127.0.0.1:27017/codeswear";
 
 function Tshirts({ products }) {
   console.log(products);
