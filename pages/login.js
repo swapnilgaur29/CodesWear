@@ -54,7 +54,7 @@ function Login() {
         router.push(`${process.env.NEXT_PUBLIC_HOST}`);
       }, 1000);
     } else {
-      toast.error(error, {
+      toast.error("error", {
         position: "top-left",
         autoClose: 3000,
         hideProgressBar: false,

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { BsCart3, BsFillBagCheckFill } from "react-icons/BS";
 import {
   AiFillCloseCircle,
@@ -20,7 +22,7 @@ function Checkout({ cart, subTotal, addToCart, removeFromCart }) {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [disabled, setDisabled] = useState(true);
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     if (e.target.name == "name") {
       setName(e.target.value);
     } else if (e.target.name == "email") {
@@ -31,8 +33,22 @@ function Checkout({ cart, subTotal, addToCart, removeFromCart }) {
       setPhone(e.target.value);
     } else if (e.target.name == "pincode") {
       setPincode(e.target.value);
+      if (e.target.value.length == 6) {
+        let pins = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/pincode`);
+        let pinJson = await pins.json();
+        if (Object.keys(pinJson).includes(e.target.value)) {
+          setCity(pinJson[e.target.value][1]);
+          setState(pinJson[e.target.value][0]);
+        } else {
+          setCity("");
+          setState("");
+        }
+      } else {
+        setCity("");
+        setState("");
+      }
     }
-    // setTimeout(() => {
+
     if (
       name.length > 3 &&
       email.length > 3 &&
@@ -44,7 +60,6 @@ function Checkout({ cart, subTotal, addToCart, removeFromCart }) {
     } else {
       setDisabled(true);
     }
-    // }, 100);
   };
 
   const initiatePayment = async () => {
@@ -68,38 +83,64 @@ function Checkout({ cart, subTotal, addToCart, removeFromCart }) {
       body: JSON.stringify(data),
     });
     let txnRes = await a.json();
-    console.log(txnRes);
-    let txnToken = txnRes.txnToken;
+    // console.log(txnRes);
+    if (txnRes.success) {
+      let txnToken = txnRes.txnToken;
 
-    var config = {
-      root: "",
-      flow: "DEFAULT",
-      data: {
-        orderId: oid,
-        token: txnToken /* update token value */,
-        tokenType: "TXN_TOKEN",
-        amount: subTotal,
-      },
-      handler: {
-        notifyMerchant: function (eventName, data) {
-          console.log("notifyMerchant handler function called");
-          console.log("eventName => ", eventName);
-          console.log("data => ", data);
+      var config = {
+        root: "",
+        flow: "DEFAULT",
+        data: {
+          orderId: oid,
+          token: txnToken /* update token value */,
+          tokenType: "TXN_TOKEN",
+          amount: subTotal,
         },
-      },
-    };
+        handler: {
+          notifyMerchant: function (eventName, data) {
+            console.log("notifyMerchant handler function called");
+            console.log("eventName => ", eventName);
+            console.log("data => ", data);
+          },
+        },
+      };
 
-    window.Paytm.CheckoutJS.init(config)
-      .then(function onSuccess() {
-        // after successfully updating configuration, invoke JS Checkout
-        window.Paytm.CheckoutJS.invoke();
-      })
-      .catch(function onError(error) {
-        console.log("error => ", error);
+      window.Paytm.CheckoutJS.init(config)
+        .then(function onSuccess() {
+          // after successfully updating configuration, invoke JS Checkout
+          window.Paytm.CheckoutJS.invoke();
+        })
+        .catch(function onError(error) {
+          console.log("error => ", error);
+        });
+    } else {
+      console.log(txnRes.error);
+      toast.error(txnRes.error, {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
       });
+    }
   };
   return (
     <div className="container m-auto px-10">
+      <ToastContainer
+        position="top-left"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <Head>
         <meta
           name="viewport"

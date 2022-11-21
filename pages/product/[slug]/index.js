@@ -14,10 +14,10 @@ function Post({ addToCart, buyNow, product, variants }) {
   const [service, setService] = useState();
 
   const checkServiceability = async () => {
-    const pins = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/pincode`);
-    const pinJson = await pins.json();
+    let pins = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/pincode`);
+    let pinJson = await pins.json();
 
-    if (pinJson.includes(parseInt(pin))) {
+    if (Object.keys(pinJson).includes(pin)) {
       setService(true);
       toast.success("Yay! Pincode is Serviceable", {
         position: "top-right",
@@ -311,10 +311,10 @@ function Post({ addToCart, buyNow, product, variants }) {
 
 export async function getServerSideProps(context) {
   if (!mongoose.connections[0].readyState) {
-    await mongoose.connect(MONGO_URI);
+    await mongoose.connect(process.env.MONGO_URI);
   }
-  const product = await Product.findOne({ slug: context.query.slug });
-  const variants = await Product.find({
+  let product = await Product.findOne({ slug: context.query.slug });
+  let variants = await Product.find({
     title: product.title,
     category: product.category,
   });

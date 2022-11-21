@@ -3,8 +3,6 @@ import Link from "next/link";
 import mongoose from "mongoose";
 import Product from "../models/Product";
 
-const MONGO_URI = "mongodb://127.0.0.1:27017/codeswear";
-
 function Tshirts({ products }) {
   console.log(products);
   return (
@@ -83,7 +81,7 @@ function Tshirts({ products }) {
 
 export async function getServerSideProps(context) {
   if (!mongoose.connections[0].readyState) {
-    await mongoose.connect(MONGO_URI);
+    await mongoose.connect(process.env.MONGO_URI);
   }
 
   const products = await Product.find({ category: "tshirt" });

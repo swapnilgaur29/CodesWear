@@ -3,12 +3,32 @@ import { resolve } from "path";
 import connectDb from "../../middleware/mongoose";
 import Order from "../../models/Order";
 const https = require("https");
+import Product from "../../models/Product";
 const PaytmChecksum = require("paytmchecksum");
 
 const handler = async (req, res) => {
   if (req.method == "POST") {
     //Check if cart is tampered with
-
+    let product,
+      sumTotal = 0;
+    let cart = req.body.cart;
+    for (let item in cart) {
+      // console.log(item);
+      sumTotal += cart[item].price * cart[item].qty;
+      product = await Product.findOne({ slug: item });
+      if (product.price != cart[item].price) {
+        res
+          .status(200)
+          .json({ success: false, error: "Your Cart has been tampered!" });
+        return;
+      }
+    }
+    if (sumTotal != req.body.subTotal) {
+      res
+        .status(200)
+        .json({ success: false, error: "Your Cart has been tampered!" });
+      return;
+    }
     //Check if cart item are out of stocks
 
     //Check if details are valid
@@ -77,8 +97,10 @@ const handler = async (req, res) => {
           });
 
           post_res.on("end", function () {
-            console.log("Response: ", response);
-            resolve(JSON.parse(response).body);
+            // console.log("Response: ", response);
+            let ress = JSON.parse(response).body;
+            ress.success = true;
+            resolve(ress);
           });
         });
 

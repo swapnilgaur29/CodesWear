@@ -77,7 +77,8 @@ function MyApp({ Component, pageProps }) {
 
   //Buy Now
   const buyNow = (itemCode, qty, price, name, size, variant) => {
-    let newCart = { itemCode: { qty: 1, price, name, size, variant } };
+    let newCart = {};
+    newCart[itemCode] = { qty: 1, price, name, size, variant };
 
     setCart(newCart);
     saveCart(newCart);
@@ -87,7 +88,6 @@ function MyApp({ Component, pageProps }) {
   //Reducing The Quantity or completely removing the item
   const removeFromCart = (itemCode, qty, price, name, size, variant) => {
     let newCart = cart;
-
     if (itemCode in cart) {
       newCart[itemCode].qty = newCart[itemCode].qty - qty;
     }
