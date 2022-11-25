@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,7 +13,7 @@ import Head from "next/head";
 import Script from "next/script";
 import { imageConfigDefault } from "next/dist/shared/lib/image-config";
 
-function Checkout({ cart, subTotal, addToCart, removeFromCart }) {
+function Checkout({ cart, clearCart, subTotal, addToCart, removeFromCart }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
@@ -21,7 +21,18 @@ function Checkout({ cart, subTotal, addToCart, removeFromCart }) {
   const [pincode, setPincode] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
+  const [user, setUser] = useState({ value: null });
   const [disabled, setDisabled] = useState(true);
+
+  useEffect(() => {
+    const myuser = JSON.parse(localStorage.getItem("myuser"));
+    console.log(JSON.parse(localStorage.getItem("myuser")));
+    if (myuser && myuser.token) {
+      setUser(myuser);
+      setEmail(myuser.email);
+    }
+  }, []);
+
   const handleChange = async (e) => {
     if (e.target.name == "name") {
       setName(e.target.value);
@@ -37,8 +48,8 @@ function Checkout({ cart, subTotal, addToCart, removeFromCart }) {
         let pins = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/pincode`);
         let pinJson = await pins.json();
         if (Object.keys(pinJson).includes(e.target.value)) {
-          setCity(pinJson[e.target.value][1]);
-          setState(pinJson[e.target.value][0]);
+          setCity(pinJson[e.target.value][0]);
+          setState(pinJson[e.target.value][1]);
         } else {
           setCity("");
           setState("");
@@ -115,6 +126,7 @@ function Checkout({ cart, subTotal, addToCart, removeFromCart }) {
         });
     } else {
       console.log(txnRes.error);
+      clearCart();
       toast.error(txnRes.error, {
         position: "top-left",
         autoClose: 3000,
@@ -174,14 +186,25 @@ function Checkout({ cart, subTotal, addToCart, removeFromCart }) {
             <label htmlFor="email" className="leading-7 text-sm text-gray-600">
               Email
             </label>
-            <input
-              onChange={handleChange}
-              value={email}
-              type="email"
-              id="email"
-              name="email"
-              className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-            />
+            {user && user.value ? (
+              <input
+                value={user.email}
+                type="email"
+                id="email"
+                name="email"
+                className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                readOnly={true}
+              />
+            ) : (
+              <input
+                // onChange={handleChange}
+                value={email}
+                type="email"
+                id="email"
+                name="email"
+                className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+              />
+            )}
           </div>
         </div>
       </div>
@@ -208,7 +231,7 @@ function Checkout({ cart, subTotal, addToCart, removeFromCart }) {
         <div className="px-2 w-1/2">
           <div className=" mb-4">
             <label htmlFor="phone" className="leading-7 text-sm text-gray-600">
-              Phone
+              Phone Number
             </label>
             <input
               onChange={handleChange}
@@ -242,11 +265,11 @@ function Checkout({ cart, subTotal, addToCart, removeFromCart }) {
         <div className="px-2 w-1/2">
           <div className=" mb-4">
             <label htmlFor="city" className="leading-7 text-sm text-gray-600">
-              City
+              District
             </label>
             <input
               value={city}
-              onChange={handleChange}
+              // onChange={handleChange}
               type="text"
               id="city"
               name="city"
@@ -262,7 +285,7 @@ function Checkout({ cart, subTotal, addToCart, removeFromCart }) {
             </label>
             <input
               value={state}
-              onChange={handleChange}
+              // onChange={handleChange}
               type="text"
               id="state"
               name="state"
@@ -287,7 +310,7 @@ function Checkout({ cart, subTotal, addToCart, removeFromCart }) {
                 <div className="font-semibold">
                   {cart[k].name} ({cart[k].size}/{cart[k].variant})
                 </div>
-                <div className="flex items-center justify-center font-semibold w-1/3 text-center">
+                <div className="flex items-center ml-auto justify-center font-semibold w-1/3 text-center">
                   <AiFillMinusCircle
                     onClick={() => {
                       removeFromCart(

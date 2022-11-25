@@ -10,7 +10,7 @@ function Login() {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
+    if (localStorage.getItem("myuser")) {
       router.push("/");
     }
   }, []);
@@ -39,7 +39,10 @@ function Login() {
     setEmail("");
     setPassword("");
     if (response.success) {
-      localStorage.setItem("token", response.token);
+      localStorage.setItem(
+        "myuser",
+        JSON.stringify({ token: response.token, email: response.email })
+      );
       toast.success("Logged In Successfully!", {
         position: "top-left",
         autoClose: 3000,
@@ -91,7 +94,7 @@ function Login() {
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
             Sign in to your account
           </h2>
-          <div className="mt-2 text-center text-sm text-gray-600">
+          <div className="mt-2 text-center text-l text-gray-600">
             Or
             <Link href="/signup">
               <div className="font-medium text-pink-600 hover:text-pink-500">

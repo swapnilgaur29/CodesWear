@@ -12,10 +12,26 @@ const handler = async (req, res) => {
     let product,
       sumTotal = 0;
     let cart = req.body.cart;
+
+    if (req.body.subTotal <= 0) {
+      res.status(200).json({
+        success: false,
+        error: "Please Build Your Cart and Try Again!",
+      });
+    }
+
+    //Check if cart item are out of stocks
     for (let item in cart) {
-      // console.log(item);
       sumTotal += cart[item].price * cart[item].qty;
       product = await Product.findOne({ slug: item });
+      if (product.availableQty < cart[item].qty) {
+        res.status(200).json({
+          success: false,
+          error: "Some items in your cart went Out Of Stock!",
+        });
+        return;
+      }
+
       if (product.price != cart[item].price) {
         res
           .status(200)
@@ -29,9 +45,24 @@ const handler = async (req, res) => {
         .json({ success: false, error: "Your Cart has been tampered!" });
       return;
     }
-    //Check if cart item are out of stocks
 
-    //Check if details are valid
+    // check if the details are valid
+    if (req.body.phone.length !== 10 || isNaN(req.body.phone)) {
+      res.status(200).json({
+        success: false,
+        error: "Please enter your 10 digit phone number!",
+        cartClear: false,
+      });
+      return;
+    }
+    if (req.body.pincode.length !== 6 || isNaN(req.body.pincode)) {
+      res.status(200).json({
+        success: false,
+        error: "Please enter your 6 digit pincode!",
+        cartClear: false,
+      });
+      return;
+    }
 
     // Initiate an Order corresponding to this order id
 

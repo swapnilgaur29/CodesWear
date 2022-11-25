@@ -1,11 +1,16 @@
 import mongoose from "mongoose";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 import Order from "../models/Order";
 
-const MyOrder = ({ order }) => {
-  console.log(order);
+const MyOrder = ({ order, clearCart }) => {
+  const router = useRouter();
   const products = order.products;
-
+  useEffect(() => {
+    if (router.query.clearCart == 1) {
+      clearCart();
+    }
+  }, []);
   return (
     <section className="text-gray-600 body-font overflow-hidden">
       <div className="container px-5 py-20 mx-auto">
@@ -44,7 +49,7 @@ const MyOrder = ({ order }) => {
                   <span className="ml-auto text-gray-900">
                     {products[key].qty}
                   </span>
-                  <span className="ml-auto text-gray-900">
+                  <span className="ml-auto text-justify text-gray-900">
                     ₹{products[key].price} X {products[key].qty} = ₹
                     {products[key].price * products[key].qty}
                   </span>
@@ -65,8 +70,8 @@ const MyOrder = ({ order }) => {
           </div>
           <img
             alt="ecommerce"
-            className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
-            src="../public/order.jpg"
+            className="lg:w-1/2 w-full lg:h-auto h-54 object-cover object-center rounded "
+            src="order.png"
           />
         </div>
       </div>
