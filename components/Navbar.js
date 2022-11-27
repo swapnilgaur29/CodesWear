@@ -68,10 +68,10 @@ const Navbar = ({
 
         <div className='nav md:mb-0 mb-1.5'>
           <ul className='flex space-x-2 font-bold md:text-md'>
-            <Link href={"/tshirts"}><a><li className='hover:text-pink-600'>Tshirts</li></a></Link>
-            <Link href={"/hoodies"}><a><li className='hover:text-pink-600'>Hoodies</li></a></Link>
-            <Link href={"/stickers"}><a><li className='hover:text-pink-600'>Stickers</li></a></Link>
-            <Link href={"/mugs"}><a><li className='hover:text-pink-600'>Mugs</li></a></Link>
+            <Link href={"/tshirts"}><a><li className='hover:text-pink-600 mx-2'>Tshirts</li></a></Link>
+            <Link href={"/hoodies"}><a><li className='hover:text-pink-600  mx-2'>Hoodies</li></a></Link>
+            <Link href={"/stickers"}><a><li className='hover:text-pink-600  mx-2'>Stickers</li></a></Link>
+            <Link href={"/mugs"}><a><li className='hover:text-pink-600  mx-2'>Mugs</li></a></Link>
           </ul>
         </div>
         <div className="flex cursor-pointer cart absolute right-0 top-3.5 md:top-5 mx-5 items-center">

@@ -60,8 +60,10 @@ function MyApp({ Component, pageProps }) {
 
   //Method to add items in the cart
   const addToCart = (itemCode, qty, price, name, size, variant) => {
+    if (Object.keys(cart).length == 0) {
+      setKey(Math.random());
+    }
     let newCart = cart;
-
     if (itemCode in cart) {
       newCart[itemCode].qty = newCart[itemCode].qty + qty;
     } else {

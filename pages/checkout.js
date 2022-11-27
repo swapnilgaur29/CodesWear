@@ -26,12 +26,26 @@ function Checkout({ cart, clearCart, subTotal, addToCart, removeFromCart }) {
 
   useEffect(() => {
     const myuser = JSON.parse(localStorage.getItem("myuser"));
-    console.log(JSON.parse(localStorage.getItem("myuser")));
     if (myuser && myuser.token) {
       setUser(myuser);
       setEmail(myuser.email);
     }
   }, []);
+
+  useEffect(() => {
+    if (
+      name.length > 3 &&
+      email.length > 3 &&
+      address.length > 3 &&
+      phone.length > 3 &&
+      pincode.length > 4
+    ) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
+  }, [name, email, address, phone, pincode])
+
 
   const handleChange = async (e) => {
     if (e.target.name == "name") {
@@ -60,17 +74,7 @@ function Checkout({ cart, clearCart, subTotal, addToCart, removeFromCart }) {
       }
     }
 
-    if (
-      name.length > 3 &&
-      email.length > 3 &&
-      address.length > 3 &&
-      phone.length > 3 &&
-      pincode.length > 4
-    ) {
-      setDisabled(false);
-    } else {
-      setDisabled(true);
-    }
+
   };
 
   const initiatePayment = async () => {
@@ -125,8 +129,10 @@ function Checkout({ cart, clearCart, subTotal, addToCart, removeFromCart }) {
           console.log("error => ", error);
         });
     } else {
-      console.log(txnRes.error);
-      clearCart();
+      // console.log(txnRes.error);
+      if (txnRes.cartClear) {
+        clearCart();
+      }
       toast.error(txnRes.error, {
         position: "top-left",
         autoClose: 3000,
@@ -186,7 +192,7 @@ function Checkout({ cart, clearCart, subTotal, addToCart, removeFromCart }) {
             <label htmlFor="email" className="leading-7 text-sm text-gray-600">
               Email
             </label>
-            {user && user.value ? (
+            {user && user.token ? (
               <input
                 value={user.email}
                 type="email"

@@ -1,18 +1,25 @@
 import mongoose from "mongoose";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Order from "../models/Order";
 
 const MyOrder = ({ order, clearCart }) => {
   const router = useRouter();
   const products = order.products;
+  const [date, setdate] = useState();
+
+
   useEffect(() => {
+    const d = new Date(order.createdAt)
+    setdate(d)
     if (router.query.clearCart == 1) {
       clearCart();
     }
   }, []);
+
+
   return (
-    <section className="text-gray-600 body-font overflow-hidden">
+    <section className="text-gray-600 body-font overflow-hidden">s
       <div className="container px-5 py-20 mx-auto">
         <div className="lg:w-4/5 mx-auto flex flex-wrap">
           <div className="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
@@ -25,7 +32,10 @@ const MyOrder = ({ order, clearCart }) => {
             <p className="leading-relaxed mb-0">
               Yay! Order Has Been Successfully Placed.
             </p>
-            <span className="leading-relaxed mb-4">
+            <p className="leading-relaxed mb-2">
+              Order Placed on: {date && date.toLocaleString("en-IN", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+            </p>
+            <span className="leading-relaxed mb-4 font-semibold">
               Your Payment Status is: {order.status}
             </span>
             <div className="flex mb-4">

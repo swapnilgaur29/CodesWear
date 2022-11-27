@@ -5,14 +5,25 @@ import Order from "../../models/Order";
 const https = require("https");
 import Product from "../../models/Product";
 const PaytmChecksum = require("paytmchecksum");
+import pincodes from '../../pincodes.json'
+
 
 const handler = async (req, res) => {
   if (req.method == "POST") {
+    //Check if the Pincode is serviceable
+    if (!Object.keys(pincodes).includes(req.body.pincode)) {
+      res.status(200).json({
+        success: false,
+        error: "Sorry Pincode is Not Serviceable",
+        cartClear: false,
+      });
+      return
+    }
+
     //Check if cart is tampered with
     let product,
       sumTotal = 0;
     let cart = req.body.cart;
-
     if (req.body.subTotal <= 0) {
       res.status(200).json({
         success: false,
@@ -28,6 +39,7 @@ const handler = async (req, res) => {
         res.status(200).json({
           success: false,
           error: "Some items in your cart went Out Of Stock!",
+          cartClear: true,
         });
         return;
       }
@@ -35,14 +47,20 @@ const handler = async (req, res) => {
       if (product.price != cart[item].price) {
         res
           .status(200)
-          .json({ success: false, error: "Your Cart has been tampered!" });
+          .json({
+            success: false, error: "Your Cart has been tampered!",
+            cartClear: true,
+          });
         return;
       }
     }
     if (sumTotal != req.body.subTotal) {
       res
         .status(200)
-        .json({ success: false, error: "Your Cart has been tampered!" });
+        .json({
+          success: false, error: "Price of some item in your cart has been changed!",
+          cartClear: true,
+        });
       return;
     }
 
@@ -131,6 +149,7 @@ const handler = async (req, res) => {
             // console.log("Response: ", response);
             let ress = JSON.parse(response).body;
             ress.success = true;
+            ress.cartClear = false;
             resolve(ress);
           });
         });
