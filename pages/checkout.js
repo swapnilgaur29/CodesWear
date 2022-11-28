@@ -29,6 +29,7 @@ function Checkout({ cart, clearCart, subTotal, addToCart, removeFromCart }) {
     if (myuser && myuser.token) {
       setUser(myuser);
       setEmail(myuser.email);
+      fetchData(myuser.token);
     }
   }, []);
 
@@ -44,8 +45,37 @@ function Checkout({ cart, clearCart, subTotal, addToCart, removeFromCart }) {
     } else {
       setDisabled(true);
     }
-  }, [name, email, address, phone, pincode])
+  }, [name, email, address, phone, pincode]);
 
+  const fetchData = async (token) => {
+    let data = { token: token };
+    let a = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/getuser`, {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    let res = await a.json();
+    console.log(res);
+    setName(res.name);
+    setAddress(res.address);
+    setPhone(res.phone);
+    setPincode(res.pincode);
+    getPincode(res.pincode);
+  };
+
+  const getPincode = async (pin) => {
+    let pins = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/pincode`);
+    let pinJson = await pins.json();
+    if (Object.keys(pinJson).includes(pin)) {
+      setCity(pinJson[pin][0]);
+      setState(pinJson[pin][1]);
+    } else {
+      setCity("");
+      setState("");
+    }
+  };
 
   const handleChange = async (e) => {
     if (e.target.name == "name") {
@@ -59,22 +89,12 @@ function Checkout({ cart, clearCart, subTotal, addToCart, removeFromCart }) {
     } else if (e.target.name == "pincode") {
       setPincode(e.target.value);
       if (e.target.value.length == 6) {
-        let pins = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/pincode`);
-        let pinJson = await pins.json();
-        if (Object.keys(pinJson).includes(e.target.value)) {
-          setCity(pinJson[e.target.value][0]);
-          setState(pinJson[e.target.value][1]);
-        } else {
-          setCity("");
-          setState("");
-        }
+        getPincode(e.target.value);
       } else {
         setCity("");
         setState("");
       }
     }
-
-
   };
 
   const initiatePayment = async () => {
@@ -183,7 +203,7 @@ function Checkout({ cart, clearCart, subTotal, addToCart, removeFromCart }) {
               type="text"
               id="name"
               name="name"
-              className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+              className="w-full bg-white rounded border border-gray-300 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
             />
           </div>
         </div>
@@ -198,7 +218,7 @@ function Checkout({ cart, clearCart, subTotal, addToCart, removeFromCart }) {
                 type="email"
                 id="email"
                 name="email"
-                className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                className="w-full bg-white rounded border border-gray-300 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                 readOnly={true}
               />
             ) : (
@@ -208,7 +228,7 @@ function Checkout({ cart, clearCart, subTotal, addToCart, removeFromCart }) {
                 type="email"
                 id="email"
                 name="email"
-                className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                className="w-full bg-white rounded border border-gray-300 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
               />
             )}
           </div>
@@ -228,7 +248,7 @@ function Checkout({ cart, clearCart, subTotal, addToCart, removeFromCart }) {
               cols="30"
               rows="2"
               type="email"
-              className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+              className="w-full bg-white rounded border border-gray-300 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
             />
           </div>
         </div>
@@ -245,7 +265,7 @@ function Checkout({ cart, clearCart, subTotal, addToCart, removeFromCart }) {
               type="phone"
               id="phone"
               name="phone"
-              className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+              className="w-full bg-white rounded border border-gray-300 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
             />
           </div>
         </div>
@@ -262,7 +282,7 @@ function Checkout({ cart, clearCart, subTotal, addToCart, removeFromCart }) {
               type="text"
               id="pincode"
               name="pincode"
-              className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+              className="w-full bg-white rounded border border-gray-300 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
             />
           </div>
         </div>
@@ -279,7 +299,7 @@ function Checkout({ cart, clearCart, subTotal, addToCart, removeFromCart }) {
               type="text"
               id="city"
               name="city"
-              className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+              className="w-full bg-white rounded border border-gray-300 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
               readOnly={true}
             />
           </div>
@@ -295,7 +315,7 @@ function Checkout({ cart, clearCart, subTotal, addToCart, removeFromCart }) {
               type="text"
               id="state"
               name="state"
-              className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+              className="w-full bg-white rounded border border-gray-300 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
               readOnly={true}
             />
           </div>

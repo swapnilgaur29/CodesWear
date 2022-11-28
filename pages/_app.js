@@ -14,7 +14,6 @@ function MyApp({ Component, pageProps }) {
 
   const router = useRouter();
   useEffect(() => {
-    // console.log("Hey I am useEffect from _app,js");
     router.events.on("routeChangeStart", () => {
       setProgress(40);
     });
@@ -27,7 +26,6 @@ function MyApp({ Component, pageProps }) {
         saveCart(JSON.parse(localStorage.getItem("cart")));
       }
     } catch (error) {
-      console.error(error);
       localStorage.clear();
     }
 
