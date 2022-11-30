@@ -38,7 +38,6 @@ const MyAccount = () => {
       body: JSON.stringify(data),
     });
     let res = await a.json();
-    console.log(res);
     setName(res.name);
     setAddress(res.address);
     setPhone(res.phone);

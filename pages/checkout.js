@@ -57,7 +57,6 @@ function Checkout({ cart, clearCart, subTotal, addToCart, removeFromCart }) {
       body: JSON.stringify(data),
     });
     let res = await a.json();
-    console.log(res);
     setName(res.name);
     setAddress(res.address);
     setPhone(res.phone);
@@ -109,6 +108,7 @@ function Checkout({ cart, clearCart, subTotal, addToCart, removeFromCart }) {
       address,
       phone,
       pincode,
+      city,
     };
     let a = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/pretransaction`, {
       method: "POST", // or 'PUT'
@@ -118,7 +118,6 @@ function Checkout({ cart, clearCart, subTotal, addToCart, removeFromCart }) {
       body: JSON.stringify(data),
     });
     let txnRes = await a.json();
-    // console.log(txnRes);
     if (txnRes.success) {
       let txnToken = txnRes.txnToken;
 
@@ -149,7 +148,6 @@ function Checkout({ cart, clearCart, subTotal, addToCart, removeFromCart }) {
           console.log("error => ", error);
         });
     } else {
-      // console.log(txnRes.error);
       if (txnRes.cartClear) {
         clearCart();
       }
@@ -223,7 +221,7 @@ function Checkout({ cart, clearCart, subTotal, addToCart, removeFromCart }) {
               />
             ) : (
               <input
-                // onChange={handleChange}
+                onChange={handleChange}
                 value={email}
                 type="email"
                 id="email"
