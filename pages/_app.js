@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import LoadingBar from "react-top-loading-bar";
 
+
 function MyApp({ Component, pageProps }) {
   const [cart, setCart] = useState({});
   const [subTotal, setSubTotal] = useState(0);
@@ -102,14 +103,12 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <>
-      <div>
-        <LoadingBar
-          color="#ff2d55"
-          progress={progress}
-          waitingTime={400}
-          onLoaderFinished={() => setProgress(0)}
-        />
-      </div>
+      <LoadingBar
+        color="#ff2d55"
+        progress={progress}
+        waitingTime={400}
+        onLoaderFinished={() => setProgress(0)}
+      />
       {key && (
         <Navbar
           logout={logout}
@@ -133,7 +132,6 @@ function MyApp({ Component, pageProps }) {
         subTotal={subTotal}
         {...pageProps}
       />
-      <Footer />
     </>
   );
 }
