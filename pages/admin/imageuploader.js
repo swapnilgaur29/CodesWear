@@ -93,11 +93,11 @@ const imageuploader = () => {
     return (
         <ThemeProvider theme={theme}>
             <FullLayout>
-                <style jsx global>{`
+                {/* <style jsx global>{`
         footer{
           display:none;
         }
-      `}</style>
+      `}</style> */}
                 <Grid container spacing={0}>
                     <Grid item xs={12} lg={12}>
                         <BaseCard title="Upload an Image">

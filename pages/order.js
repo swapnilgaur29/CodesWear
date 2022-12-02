@@ -19,7 +19,7 @@ const MyOrder = ({ order, clearCart }) => {
 
 
   return (
-    <section className="text-gray-600 body-font overflow-hidden">s
+    <section className="text-gray-600 body-font overflow-hidden min-h-screen ">
       <div className="container px-5 py-20 mx-auto">
         <div className="lg:w-4/5 mx-auto flex flex-wrap">
           <div className="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">

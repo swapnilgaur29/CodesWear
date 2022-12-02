@@ -55,7 +55,7 @@ function Signup() {
   };
 
   return (
-    <div className="flex min-h-full items-center justify-center py-12 px-6 sm:px-6 lg:px-8">
+    <div className="flex min-h-screen items-start justify-center py-20 px-6 sm:px-6 lg:px-8">
       <ToastContainer
         position="top-left"
         autoClose={5000}

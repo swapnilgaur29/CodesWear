@@ -131,7 +131,7 @@ const MyAccount = () => {
     }
   };
 
-  return <div className="container mx-auto py-9 px-10">
+  return <div className="container mx-auto py-9 px-10 min-h-screen">
     <ToastContainer
       position="top-left"
       autoClose={3000}

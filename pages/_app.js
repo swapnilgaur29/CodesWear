@@ -132,6 +132,7 @@ function MyApp({ Component, pageProps }) {
         subTotal={subTotal}
         {...pageProps}
       />
+      <Footer />
     </>
   );
 }

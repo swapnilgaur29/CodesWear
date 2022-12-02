@@ -8,10 +8,10 @@ function Footer() {
       <footer className="text-gray-600 body-font">
         <div className="container px-5 py-24 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
           <div className="w-64 flex-shrink-0 md:mx-3 mx-auto text-center md:text-left">
-          <Link href="/">
-            <a className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
-              <Image src="/logobg.png" width={205} height={40} alt="" />
-            </a>
+            <Link href="/">
+              <a className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
+                <Image src="/logobg.png" width={205} height={40} alt="" />
+              </a>
             </Link>
             <p className="mt-2 text-sm text-gray-500 px-2">Wear The &lt;Code/&gt; </p>
             <p className="text-sm text-gray-500 px-2">Premium Tshirts, Hoodies and Apparels</p>

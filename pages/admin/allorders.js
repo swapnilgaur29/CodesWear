@@ -8,11 +8,11 @@ import ProductPerfomance from "../../src/components/dashboard/ProductPerfomance"
 const AllOrders = () => {
     return (
         <ThemeProvider theme={theme}>
-            <style jsx global>{`
+            {/* <style jsx global>{`
         footer{
           display:none;
         }
-      `}</style>
+      `}</style> */}
             <FullLayout>
                 <Grid container spacing={0}>
                     <Grid item xs={12} lg={12}>
